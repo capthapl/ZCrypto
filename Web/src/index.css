@@ -1,0 +1,74 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #00000005;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100vh;
+}
+header {
+  -webkit-box-shadow: 2px 4px 5px 0px rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 2px 4px 5px 0px rgba(0, 0, 0, 0.12);
+  box-shadow: 2px 4px 5px 0px rgba(0, 0, 0, 0.12);
+  height: 50px;
+  font-size: 1.5em;
+  line-height: 50px;
+  font-weight: bold;
+  background-color: white;
+}
+#content {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+}
+
+#coinList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+footer {
+  background-color: black;
+  height: 50px;
+}
+
+.coinBuyContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  -webkit-box-shadow: 3px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 3px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  box-shadow: 3px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  padding: 5px 0px 5px 0px;
+  width: 100%;
+}
+
+.coinCol
+{
+  width: 100%;
+  text-align: left;
+  margin-left: 15px;
+}
+.greenCoin
+{
+  color: green;
+}
+
+.redCoin
+{
+  color: red;
+}
+
+.bold
+{
+  font-weight: bold;
+}
