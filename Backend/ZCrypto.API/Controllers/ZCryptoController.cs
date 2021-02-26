@@ -15,22 +15,53 @@ namespace ZCrypto.API.Controllers
     public class ZCryptoController : ControllerBase
     {
         [HttpPost("AddBuy")]
-        public IActionResult AddBuy([FromBody] Buy buy)
+        public IActionResult AddBuy([FromBody] Buy buy,[FromHeader] string securityCode)
         {
-            using (zcryptoContext ctx = new zcryptoContext())
+            if (securityCode == null || !securityCode.Equals("secret"))
             {
-                ctx.Buys.Add(buy);
-                ctx.SaveChanges();
+                return Unauthorized();
             }
 
-            return Ok();
+            try
+            {
+                using (zcryptoContext ctx = new zcryptoContext())
+                {
+                    ctx.Buys.Add(buy);
+                    ctx.SaveChanges();
+                }
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpGet("Buy")]
         public IActionResult GetBuy()
         {
-            return Ok(DataConsistentController.GetActiveBuysWithReportedExchangeRates().Take(20));
+            try
+            {
+                return Ok(DataConsistentController.GetActiveBuysWithReportedExchangeRates().Take(20));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
-        
+
+        [HttpGet("ActiveCoinIds")]
+        public IActionResult GetActiveCoinIds()
+        {
+            try
+            {
+                return Ok(DataConsistentController.GetActiveCoinsIds());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

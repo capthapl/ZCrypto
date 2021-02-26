@@ -71,8 +71,14 @@ namespace ZCrypto.BLL
         {
             using zcryptoContext ctx = new zcryptoContext();
             return ctx.Buys.Where(x => x.Active.HasValue && x.Active.Value)
-                .Include(x=>x.Coin)
-                .Include(x => x.ReportedExchangeRates.OrderByDescending(c=>c.Id).Take(1)).ToList().OrderBy(x=>x.Id).ToList();
+                .Include(x => x.Coin)
+                .Include(x => x.ReportedExchangeRates.OrderByDescending(c => c.Id).Take(1)).ToList().OrderBy(x => x.Id).ToList();
+        }
+
+        public static List<string> GetActiveCoinsIds()
+        {
+            using zcryptoContext ctx = new zcryptoContext();
+            return ctx.Coins.Where(x => x.IsActive).Select(x => x.Id).ToList();
         }
     }
 }

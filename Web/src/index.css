@@ -38,7 +38,74 @@ header {
 
 footer {
   background-color: black;
-  height: 50px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+}
+
+@media screen and (max-width: 590px) {
+  footer {
+    flex-direction: column;
+  }
+  footer > div {
+    width: 350px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+
+  .minCenterForm {
+    width: 350px;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  *{
+    font-size: 12px;
+  }
+  footer
+  {
+    font-size: 15px;
+  }
+}
+
+
+@media screen and (max-width: 500px) {
+  *{
+    font-size: 9px;
+  }
+  footer > div {
+    width: 80%;
+  }
+  
+  .minCenterForm {
+    width: 80%;
+  }
+}
+
+
+footer input {
+  height: 20px;
+  color: black;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+footer button {
+  border-radius: 2px;
+  height: 25px;
+  outline: none;
+  border: none;
+  margin-right: 10px;
+}
+
+footer span {
+  color: white;
 }
 
 .coinBuyContainer {
@@ -48,27 +115,43 @@ footer {
   -webkit-box-shadow: 3px 1px 10px 0px rgba(0, 0, 0, 0.12);
   -moz-box-shadow: 3px 1px 10px 0px rgba(0, 0, 0, 0.12);
   box-shadow: 3px 1px 10px 0px rgba(0, 0, 0, 0.12);
-  padding: 5px 0px 5px 0px;
-  width: 100%;
+  padding: 5px 0px 5px 20px;
 }
 
-.coinCol
-{
-  width: 100%;
+.coinCol {
+  width: 80%;
   text-align: left;
-  margin-left: 15px;
+  margin-right: 5px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
 }
-.greenCoin
-{
+
+.coinBtn {
+  text-align: center;
+  line-height: 40px;
+  height: 40px;
+  background-color: cornflowerblue;
+  margin-right: 10px;
+  border-radius: 4px;
+  padding: 0px 15px 0px 15px;
+  cursor: pointer;
+  align-self: center;
+  font-weight: bold;
+}
+.greenCoin {
   color: green;
 }
 
-.redCoin
-{
+.redCoin {
   color: red;
 }
 
-.bold
-{
+.bold {
   font-weight: bold;
+}
+
+.blue {
+  color: blue;
 }

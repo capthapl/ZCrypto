@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ZCrypto.BLL;
 using ZCrypto.BLL.EF;
 using ZCrypto.BLL.Model.Api;
@@ -18,6 +19,11 @@ namespace ZCrypto.Service.Tasks
                 API_Market_Price price = client.GetMarketPrice(b.CoinId);
                 if (price is not null)
                 {
+                    if(ctx.ReportedExchangeRates.Where(x=>x.BuyId == b.Id).Count() > 1000)
+                    {
+                        ctx.ReportedExchangeRates.RemoveRange(ctx.ReportedExchangeRates.Where(x => x.BuyId == b.Id));
+                        ctx.SaveChanges();
+                    }
                     ctx.ReportedExchangeRates.Add(new ReportedExchangeRate()
                     {
                         BuyId = b.Id,

@@ -25,9 +25,15 @@ namespace ZCrypto.Service
             {
                 foreach (var task in _tasksToRun)
                 {
-                    task.Run();
+                    try
+                    {
+                        task.Run();
+                    }catch(Exception ex)
+                    {
+                        Console.WriteLine(ex.Message + " " + ex.StackTrace);
+                    }
                 }
-                await Task.Delay(10000, stoppingToken);
+                await Task.Delay(2000, stoppingToken);
             }
         }
     }
