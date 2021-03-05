@@ -20,6 +20,9 @@ namespace ZCrypto.BLL.EF
         public virtual DbSet<Buy> Buys { get; set; }
         public virtual DbSet<Coin> Coins { get; set; }
         public virtual DbSet<CoinBlacklistIntegration> CoinBlacklistIntegrations { get; set; }
+        public virtual DbSet<Log> Logs { get; set; }
+        public virtual DbSet<LowPriceSymbolScan> LowPriceSymbolScans { get; set; }
+        public virtual DbSet<LowPriceSymbolScanAlert> LowPriceSymbolScanAlerts { get; set; }
         public virtual DbSet<ReportedExchangeRate> ReportedExchangeRates { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -27,13 +30,13 @@ namespace ZCrypto.BLL.EF
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseNpgsql("Host=localhost;Database=zcrypto;Username=postgres;Password=secret");
+                optionsBuilder.UseNpgsql("Host=secret;Database=zcrypto;Username=postgres;Password=secret");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "English_United States.1252");
+            modelBuilder.HasAnnotation("Relational:Collation", "en_US.UTF-8");
 
             modelBuilder.Entity<Buy>(entity =>
             {
@@ -52,16 +55,15 @@ namespace ZCrypto.BLL.EF
                     .HasColumnName("coin_id");
 
                 entity.Property(e => e.Count)
-                    .HasPrecision(10, 2)
+                    .HasPrecision(13, 5)
                     .HasColumnName("count");
 
                 entity.Property(e => e.CreatedTime)
-                    .HasColumnType("date")
                     .HasColumnName("created_time")
-                    .HasDefaultValueSql("CURRENT_DATE");
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.Property(e => e.ExchangeRatePln)
-                    .HasPrecision(10, 2)
+                    .HasPrecision(13, 5)
                     .HasColumnName("exchange_rate_pln");
 
                 entity.HasOne(d => d.Coin)
@@ -119,6 +121,56 @@ namespace ZCrypto.BLL.EF
                     .WithMany(p => p.CoinBlacklistIntegrations)
                     .HasForeignKey(d => d.CoinId)
                     .HasConstraintName("coin_blacklist_integration_coin_id_fkey");
+            });
+
+            modelBuilder.Entity<Log>(entity =>
+            {
+                entity.ToTable("log");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Message)
+                    .IsRequired()
+                    .HasMaxLength(8046)
+                    .HasColumnName("message");
+            });
+
+            modelBuilder.Entity<LowPriceSymbolScan>(entity =>
+            {
+                entity.ToTable("low_price_symbol_scan");
+
+                entity.HasIndex(e => e.Symbol, "UQ_Symbol")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.LastKlines).HasColumnName("last_klines");
+
+                entity.Property(e => e.PercentThreshold).HasColumnName("percent_threshold");
+
+                entity.Property(e => e.Symbol)
+                    .IsRequired()
+                    .HasColumnName("symbol");
+            });
+
+            modelBuilder.Entity<LowPriceSymbolScanAlert>(entity =>
+            {
+                entity.ToTable("low_price_symbol_scan_alert");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.ActiveDuration).HasColumnName("active_duration");
+
+                entity.Property(e => e.LowPriceSymbolScanId).HasColumnName("low_price_symbol_scan_id");
+
+                entity.Property(e => e.PercentLow)
+                    .HasPrecision(10, 3)
+                    .HasColumnName("percent_low");
+
+                entity.HasOne(d => d.LowPriceSymbolScan)
+                    .WithMany(p => p.LowPriceSymbolScanAlerts)
+                    .HasForeignKey(d => d.LowPriceSymbolScanId)
+                    .HasConstraintName("low_price_symbol_scan_alert_low_price_symbol_scan_id_fkey");
             });
 
             modelBuilder.Entity<ReportedExchangeRate>(entity =>

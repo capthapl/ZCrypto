@@ -12,11 +12,11 @@ namespace ZCrypto.Service
 {
     public class Worker : BackgroundService
     {
-        private readonly List<IZCryptoTask> _tasksToRun = new List<IZCryptoTask>() {new SyncEnchangeForBuy()};
-        
+        private readonly List<IZCryptoTask> _tasksToRun = new List<IZCryptoTask>()
+            {new SyncEnchangeForBuy(), new LowPriceCryptoTask()};
+
         public Worker()
         {
-          
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -28,12 +28,14 @@ namespace ZCrypto.Service
                     try
                     {
                         task.Run();
-                    }catch(Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         Console.WriteLine(ex.Message + " " + ex.StackTrace);
                     }
                 }
-                await Task.Delay(2000, stoppingToken);
+
+                await Task.Delay(500, stoppingToken);
             }
         }
     }
